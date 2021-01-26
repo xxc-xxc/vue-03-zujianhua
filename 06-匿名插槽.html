@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./js/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <!-- 这里的所有组件标签中嵌套的内容会替换slot，如果不传值，则使用slot中的默认值 -->
+        <alert-box>有bug发生</alert-box>
+        <alert-box>有一个警告</alert-box>
+        <alert-box></alert-box>
+    </div>
+    <script>
+        /* 组件的最大特性就是复用性，而用好插槽能大大提高组件的复用能力。 */
+        /*
+            组件插槽：父组件向子组件传递内容 
+         */
+        Vue.component('alert-box', {
+            template: `
+                <div>
+                    <strong>ERROR:</strong>
+                    <!-- 当组件渲染的时候，这个<slot>元素将会被替换为“组件标签中的内容”。-->
+                    <!-- 插槽内可以包含任何模板代码，包括HTML。-->
+                    <slot>默认内容</slot>
+                </div>
+            `,
+        });
+        let vm=new Vue({
+           el:'#app',
+           data:{
+
+           },
+           methods:{
+
+           },
+        });
+    </script>
+</body>
+
+</html>
