@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./js/vue.js"></script>
+    <style>
+        .current {
+            background-color: aqua;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <!-- 
+            1.当我们希望li的样式由外部使用组件的地方定义，因为可能有多个地方要使用该组件，
+              但样式希望不一样，这时需要使用作用域插槽
+         -->
+        <fruit-list :list="list">
+            <!-- 
+                2.父组件中使用了<template>元素，而且包含scope="slotProps"，
+                  slotProps在这里只是临时变量 
+             -->
+            <template slot-scope="slotProps">
+                <strong v-if="slotProps.info.id == 3" class="current">
+                    {{slotProps.info.name}}
+                </strong>
+                <span v-else>{{slotProps.info.name}}</span>
+            </template>
+        </fruit-list>
+    </div>
+    <script>
+        /* 
+            1.父组件对子组件加工处理
+            2.既可以复用子组件的slot，又可以使slot内容不一样
+         */
+        /* 作用域插槽 */
+        Vue.component('fruit-list', {
+            props: ['list'],
+            template: `
+                <div>
+                    <li v-for="(item, index) in list" :key="index">
+                        <!-- 3.子组件模板中，<slot>元素上有一个类似props传递数据给组件的写法msg="xxx" -->
+                        <!-- 插槽可以提供一个默认内容，如果父组件没有为插槽提供内容，则显示默认内容 -->
+                        <slot :info="item">{{item.name}}</slot>
+                    </li>
+                </div>
+            `,
+        })
+        let vm = new Vue({
+            el: '#app',
+            data: {
+                list: [{
+                    id: 1,
+                    name: 'apple'
+                }, {
+                    id: 2,
+                    name: 'orange'
+                }, {
+                    id: 3,
+                    name: 'banana'
+                }]
+            },
+            methods: {
+
+            },
+        });
+    </script>
+</body>
+
+</html>
