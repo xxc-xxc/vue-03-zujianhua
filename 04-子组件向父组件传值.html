@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./js/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <div :style="{fontSize: fontSize + 'px'}">{{pmsg}}</div>
+        <!-- 2.父组件用v-on监听子组件的事件 -->
+        <!-- 这里enlarge-text与$emit中的第一个参数对应，handle为对应的事件处理方法。 -->
+        <menu-item :parr="parr" @enlarge-text="handle($event)"></menu-item>
+    </div>
+    <script>
+        /*
+            1.子组件用$emit()触发事件。
+            2.$emit()第一个参数为自定义的事件名称，第二个参数为需要传递的数据。
+            3.父组件用v-on监听子组件的事件。
+         */
+
+        // 子组件向父组件传值——携带参数
+        Vue.component('menu-item', {
+            props: ['parr'],
+            template: `
+                <div>
+                    <ul>
+                        <li v-for="(item, index) in parr" :key="index">{{item}}</li>
+                    </ul>
+                    ###  1、子组件用$emit()触发事件
+                    ### 第一个参数为 自定义的事件名称   第二个参数为需要传递的数据  
+                    <button @click='$emit("enlarge-text", 5)'>扩大父组件中字体大小</button>
+                    <button @click='$emit("enlarge-text", 10)'>扩大父组件中字体大小</button>
+                </div>
+            `,
+        })
+
+        let vm=new Vue({
+           el:'#app',
+           data:{
+               pmsg: '父组件的内容',
+               parr: ['apple','orange','banana'],
+               fontSize: 10,
+           },
+           methods:{
+               handle(val) {
+                   this.fontSize += val;
+               }
+           },
+        });
+    </script>
+</body>
+
+</html>
